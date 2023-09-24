@@ -17,6 +17,8 @@ export default class Map extends React.Component {
       petshops: [],
       selectedPetId: null,
       markerClicked: false,
+      searchText: "",
+      distance: 40,
     };
   }
 
@@ -36,8 +38,50 @@ export default class Map extends React.Component {
   };
 
   header = () => {
+    const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+      const deg2rad = (deg) => {
+        return deg * (Math.PI / 180);
+      };
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2 - lat1); // deg2rad below
+      var dLon = deg2rad(lon2 - lon1);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+          Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // Distance in km
+      return d; // distance returned
+    };
+
+    const handleSearch = () => {
+      let filteredPetShops = petData.filter(
+        (p) =>
+          p.name.toLowerCase().includes(this.state.searchText.toLowerCase()) &&
+          getDistanceFromLatLonInKm(
+            this.state.latitude,
+            this.state.longitude,
+            p.latitude,
+            p.longitude
+          ) < this.state.distance
+      );
+      this.setState({
+        petshops: filteredPetShops,
+      });
+    };
+
+    const resetAll = () => {
+      this.setState({
+        petshops: petData,
+        distance: 40,
+        searchText: "",
+      });
+    };
+
     return (
-      <div>
+      <div style={{ marginBottom: 10 }}>
         <Typography variant="h4" style={{ textAlign: "center" }}>
           PET STORE FINDER
         </Typography>
@@ -45,6 +89,9 @@ export default class Map extends React.Component {
           label="Search for a Pet Store..."
           variant="outlined"
           style={{ width: "100%" }}
+          onChange={(event) => {
+            this.setState({ searchText: event.target.value });
+          }}
         />
         <div
           style={{
@@ -55,14 +102,31 @@ export default class Map extends React.Component {
           }}
         >
           <Typography>Distance:</Typography>
-          <Slider style={{ width: "75%" }} />
+          <Slider
+            style={{ width: "75%" }}
+            value={this.state.distance}
+            valueLabelDisplay="auto"
+            step={5}
+            marks
+            min={0}
+            max={50}
+            onChange={(event, value) => this.setState({ distance: value })}
+          />
         </div>
         <div>
-          <Button variant="outlined" style={{ width: "50%" }}>
+          <Button
+            variant="outlined"
+            onClick={resetAll}
+            style={{ width: "50%" }}
+          >
             <RestartAltIcon />
             Reset
           </Button>
-          <Button variant="contained" style={{ width: "50%" }}>
+          <Button
+            variant="contained"
+            onClick={handleSearch}
+            style={{ width: "50%" }}
+          >
             <SearchIcon />
             Search
           </Button>
@@ -83,8 +147,12 @@ export default class Map extends React.Component {
       }
     };
 
+    const handlePetClick = (pet) => {
+      window.location.replace("/pet/" + pet.id);
+    };
+
     return (
-      <div style={{ backgroundColor: "cyan", height: "80vh" }}>
+      <div style={{ height: "80vh" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_KEY }}
           defaultCenter={{
@@ -116,9 +184,19 @@ export default class Map extends React.Component {
                 <div
                   lat={petshop.latitude}
                   lng={petshop.longitude}
-                  style={{ backgroundColor: "White", width: 100 }}
+                  onClick={() => {
+                    handlePetClick(petshop);
+                  }}
+                  style={{
+                    backgroundColor: "White",
+                    padding: 10,
+                    borderRadius: 20,
+                    width: 100,
+                  }}
                 >
-                  <Typography>{petshop.name}</Typography>
+                  <Typography style={{ textAlign: "center" }}>
+                    {petshop.name}
+                  </Typography>
                 </div>
               );
             } else {
