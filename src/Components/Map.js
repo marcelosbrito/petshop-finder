@@ -82,14 +82,15 @@ export default class Map extends React.Component {
     };
 
     return (
-      <div style={{ marginBottom: 10 }}>
+      <div className="header" style={{ marginBottom: 10 }}>
         <Typography variant="h4" style={{ textAlign: "center" }}>
           PET STORE FINDER
         </Typography>
         <TextField
+          className="header-input"
           label="Search for a Pet Store..."
           variant="outlined"
-          style={{ width: "100%" }}
+          style={{ width: "50%" }}
           onChange={(event) => {
             this.setState({ searchText: event.target.value });
           }}
@@ -153,7 +154,7 @@ export default class Map extends React.Component {
     };
 
     return (
-      <div style={{ height: "80vh" }}>
+      <div className="map" style={{ height: "80vh" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: process.env.REACT_APP_KEY }}
           defaultCenter={{
