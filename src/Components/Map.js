@@ -90,7 +90,7 @@ export default class Map extends React.Component {
           className="header-input"
           label="Search for a Pet Store..."
           variant="outlined"
-          style={{ width: "50%" }}
+          style={{ width: "100%" }}
           onChange={(event) => {
             this.setState({ searchText: event.target.value });
           }}
