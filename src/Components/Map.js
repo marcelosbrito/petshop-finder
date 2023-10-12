@@ -82,27 +82,17 @@ export default class Map extends React.Component {
     };
 
     return (
-      <div className="header" style={{ marginBottom: 10 }}>
-        <Typography variant="h4" style={{ textAlign: "center" }}>
-          PET STORE FINDER
-        </Typography>
+      <div className="header">
+        <Typography variant="h4">PET STORE FINDER</Typography>
         <TextField
           className="header-input"
           label="Search for a Pet Store..."
           variant="outlined"
-          style={{ width: "100%" }}
           onChange={(event) => {
             this.setState({ searchText: event.target.value });
           }}
         />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <div className="header-distance">
           <Typography>Distance:</Typography>
           <Slider
             style={{ width: "75%" }}
