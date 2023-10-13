@@ -95,7 +95,6 @@ export default class Map extends React.Component {
         <div className="header-distance">
           <Typography>Distance:</Typography>
           <Slider
-            style={{ width: "75%" }}
             value={this.state.distance}
             valueLabelDisplay="auto"
             step={5}
@@ -105,7 +104,7 @@ export default class Map extends React.Component {
             onChange={(event, value) => this.setState({ distance: value })}
           />
         </div>
-        <div>
+        <div className="header-button">
           <Button
             variant="outlined"
             onClick={resetAll}
@@ -174,16 +173,11 @@ export default class Map extends React.Component {
             if (this.state.selectedPetId === petshop.id) {
               return (
                 <div
+                  className="location-info"
                   lat={petshop.latitude}
                   lng={petshop.longitude}
                   onClick={() => {
                     handlePetClick(petshop);
-                  }}
-                  style={{
-                    backgroundColor: "White",
-                    padding: 10,
-                    borderRadius: 20,
-                    width: 100,
                   }}
                 >
                   <Typography style={{ textAlign: "center" }}>
