@@ -8,7 +8,3 @@ Create with:
 
 - React
 - Gloogle Maps API
-
-# How to access
-
-https://marcelosbrito.github.io/petshop-finder/
